@@ -1,0 +1,70 @@
+/* Minimal overlay for ZTE WE212X board (IPQ6018)
+ * Includes a common ipq6018 dtsi and provides only board-specific
+ * overrides: model/compatible, chosen, aliases, leds, MACs and pinctrl.
+ */
+
+/dts-v1/;
+
+#include "qcom-ipq6018-cmiot.dtsi"
+
+/
+{
+    model = "ZTE WE212X";
+    compatible = "zte,we212x", "qcom,ipq6018";
+
+    chosen {
+        bootargs-append = " swiotlb=1 coherent_pool=2M";
+    };
+
+    aliases {
+        serial0 = &blsp1_uart3;
+        /* sdhc phandle may be unavailable in this tree; keep path as fallback */
+        sdhc2 = "/soc/sdhci_sd@7804000";
+        ethernet0 = &dp5;
+        ethernet1 = &dp4;
+        ethernet2 = &dp3;
+        ethernet3 = &dp2;
+        ethernet4 = &dp1;
+    };
+
+    soc {
+        leds {
+            compatible = "gpio-leds";
+            pinctrl-0 = <&leds_pins>;
+            pinctrl-names = "default";
+
+            led_red {
+                label = "we212x:led:red";
+                gpios = <&tlmm 34 GPIO_ACTIVE_HIGH>;
+            };
+
+            led_green {
+                label = "we212x:led:green";
+                gpios = <&tlmm 35 GPIO_ACTIVE_HIGH>;
+            };
+        };
+
+        /* board-observed MAC addresses (from device DTB) */
+        dp4 { local-mac-address = [28 4a 01 00 00 00]; };
+        dp5 { local-mac-address = [00 03 7f ba db ad]; };
+    };
+
+    &tlmm {
+        leds_pins: leds_pins {
+            mux {
+                pins = "gpio34", "gpio35";
+                function = "gpio";
+                drive-strength = <8>;
+                bias-pull-down;
+            };
+        };
+    };
+
+    &mdio {
+        ethernet-phy@0 { reg = <0>; };
+        ethernet-phy@1 { reg = <1>; };
+        ethernet-phy@2 { reg = <2>; };
+        ethernet-phy@3 { reg = <3>; };
+        ethernet-phy@4 { reg = <4>; };
+    };
+};
