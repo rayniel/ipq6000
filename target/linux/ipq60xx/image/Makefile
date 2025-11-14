@@ -145,9 +145,8 @@ define Device/zte_we212x
 	BLOCKSIZE := 128k
 	PAGESIZE := 2048
 	DEVICE_DTS := qcom-ipq6018-we212x
-	DEVICE_DTS_CONFIG := config@cp01-c1
+	DEVICE_DTS_CONFIG := config@cp03-c1
 	DEVICE_TITLE := ZTE WE212X
-	DEVICE_PACKAGES := kmod-usb3 kmod-usb-phy-msm
 endef
 TARGET_DEVICES += zte_we212x
 
